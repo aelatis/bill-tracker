@@ -2,8 +2,7 @@
   (:use org.httpkit.server
         compojure.core
         [ring.middleware.accept-param :only [wrap-accept-param]]
-        [cheshire.core :only [generate-string]]
-        slim.core)
+        [cheshire.core :only [generate-string]])
   (:require [clojure.java.jdbc :as sql]
             [compojure.handler :as handler]
             [compojure.route :as route]))
