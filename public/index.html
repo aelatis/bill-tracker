@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Monthly Expense Calculator</title>
+    <meta name="viewport" content="width=device-width,
+                                   initial-scale=1.0">
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/mexcalc.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+
+      <h1>Monthly Expense Calculator</h1>
+      <div id="msgContainer"></div>
+      <table id="expenseTable" class="table table-striped
+      table-bordered table-condensed">
+        <tr>
+          <th class="expense" colspan="2">Expense</th>
+          <th class="amount">Amount</th>
+          <th class="due">Due Date</th>
+          <th class="complete">Completed</th>
+        </tr>
+        </table>
+        <p class="addContainer"><button id="addButton" class="btn
+        btn-large btn-primary" type="button">Add Expense</button></p>
+    </div> <!-- /container -->
+
+    <!-- Edit Dialog -->
+    <div id="editDlg" role="dialog" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">x</button>
+            <h3>Add/Edit Expense</h3>
+        </div>
+        <div class="modal-body">
+            <form id="editForm">
+                <input type="hidden" name="expid" id="editDlgId">
+                <fieldset>
+                    <label>Name</label>
+                    <input type="text" placeholder="Name" name="name"
+                           id="editDlgName">
+                    <label>Amount</label>
+                    <input type="text" placeholder="Amount"
+                    name="amount" id="editDlgAmount">
+                    <label>Due Day</label>
+                    <input type="text" placeholder="Due Day"
+                    name="due" id="editDlgDue">
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal"
+            aria-hidden="true">Close</a>
+            <button class="btn btn-primary" id="editDlgSave"
+            data-dismiss="modal">Save</a>
+        </div>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            // Setup the complete/edit/remove buttons
+            $(document).on('click', 'a.action', function() {
+                $.post('actions.php', 
+                    {
+                        action: $(this).attr('action'),
+                        expid: $(this).attr('expid')
+                    },
+                    handleResult,
+                    'json'
+                );
+                return false;
+            });
+
+            // Fetch all the data
+            $.post('actions.php',
+                {
+                    action: 'get',
+                    expid: -1
+                },
+                handleResult,
+                'json'
+            );
+
+            $("#editDlg").on('shown', function() {
+              $("#editDlgName").focus();
+            });
+
+            $("#editDlgSave").click(function() {
+                saveSubmit()
+            });
+
+            $("#editForm").keyup(function(e) {
+                var code = e.which;
+                if (code == 13) {
+                    $("#editDlg").modal("hide");
+                    e.preventDefault();
+                    saveSubmit();
+                }
+            });
+
+            $("#addButton").click(actionShowAdd);
+        })
+
+        function saveSubmit() {
+            $.post('actions.php',
+                {
+                    action: 'save',
+                    expid: $("#editDlgId").val(),
+                    name: $("#editDlgName").val(),
+                    amount: $("#editDlgAmount").val(),
+                    due: $("#editDlgDue").val()
+                },
+                handleResult,
+                'json'
+            );
+        }
+
+        function handleResult(data) {
+            var id = data.id;
+            var action = data.action;
+
+            if (data.result == 'ERROR') {
+                addAlert(data.msg, 'alert alert-error');
+            } else if (action == 'complete') {
+                actionComplete(data);
+            } else if (action == 'edit') {
+                actionEdit(data);
+            } else if (action == 'save') {
+                actionSave(data);
+            } else if (action == 'remove') {
+                actionRemove(data);
+            } else if (action == 'get') {
+                actionGet(data);
+            }
+        }
+
+        function actionGet(data) {
+            for (var key in data.expenses) {
+                var expense = data.expenses[key];
+                updateRow(expense);
+            }
+        }
+
+        function actionComplete(data) {
+            updateRow(data);
+        }
+
+        function actionEdit(data) {
+            // Fill in the edit dialog
+            $("#editDlgId").val(data.id);
+            $("#editDlgName").val(data.name).focus();
+            $("#editDlgAmount").val(data.amount);
+            $("#editDlgDue").val(data.due);
+            $("#editDlg").modal();
+        }
+
+        function actionSave(data) {
+            updateRow(data);
+        }
+
+        function actionRemove(data) {
+            removeRow(data);
+        }
+
+        function actionShowAdd() {
+            // Reuse the edit dialog with a -1 index
+            $("#editDlgId").val('-1');
+            $("#editDlgName").val('');
+            $("#editDlgAmount").val('');
+            $("#editDlgDue").val('');
+            $("#editDlg").modal();
+        }
+
+        function addAlert(msg, msgClass) {
+            var container = $("#msgContainer");
+            var msgDiv = $("<div></div>");
+            msgDiv.addClass(msgClass);
+            var button = $('<button type="button" class="close"
+            data-dismiss="alert">&times;</button>');
+            msgDiv.append(button);
+            msgDiv.append(msg);
+            container.append(msgDiv);
+        }
+
+        // Update an existing row, or create a new row, based on data
+        function updateRow(data) {
+            var id = data.id;
+            var name = data.name;
+            var amount = data.amount;
+            var due = data.due;
+            var complete = data.complete;
+            var expRow = $("#exp" + id);
+
+            // New entry, create the row
+            if (expRow.length == 0) {
+                expRow = $('<tr id="exp' + id + '"></tr>');
+                // Create the action buttons
+                var actCell = $('<td class="action"></td>');
+                actCell.append($('<a class="action btn btn-mini"
+            href="#" action="complete" expid="' + id +
+            '"><i class="icon-ok"> </i></a>'));
+                actCell.append($('<a class="action btn btn-mini"
+            href="#" action="edit" expid="' + id +
+            '"><i class="icon-edit"> </i></a>'));
+                actCell.append($('<a class="action btn btn-mini"
+            href="#" action="remove" expid="' + id +
+            '"><i class="icon-remove"> </i></a>'));
+                expRow.append(actCell);
+
+                expRow.append($('<td class="expense"></td>'));
+                expRow.append($('<td></td>'));
+                expRow.append($('<td></td>'));
+                expRow.append($('<td></td>'));
+
+                $("#expenseTable").append(expRow);
+            }
+
+            // Update data
+            if (name != undefined) {
+                $(expRow.children()[1]).html(name);
+            }
+            if (amount != undefined) {
+                $(expRow.children()[2]).html(amount);
+            }
+            if (due != undefined) {
+                $(expRow.children()[3]).html(due);
+            }
+            if (complete != undefined) {
+                $(expRow.children()[4]).html(complete);
+            }
+        }
+
+        // Remove a row after deletion
+        function removeRow(data) {
+            var id = data.id;
+
+            var expRow = $("#exp" + id);
+            if (expRow == undefined) {
+                addAlert('Unable to remove non-existent expense',
+            'alert alert-error');
+            } else {
+                expRow.remove();
+            }
+        }
+    </script>
+  </body>
+</html>

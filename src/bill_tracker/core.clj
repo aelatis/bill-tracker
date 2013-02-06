@@ -25,8 +25,7 @@
                                     :body (generate-string (expenses))}))))
 
 (defroutes html-router
-  (GET "/" [] "Welcome to the index HTML page")
-  (GET "/expenses" [] "Welcome to the expenses HTML page")
+  (route/files "/" {:root (str (System/getProperty "user.dir") "/public")})
   (route/not-found "Not found"))
 
 (defroutes json-router
