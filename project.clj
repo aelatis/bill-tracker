@@ -9,5 +9,6 @@
                  [ring-accept-param "0.1.1"]
                  [org.clojure/java.jdbc "0.2.3"]
                  [mysql/mysql-connector-java "5.1.6"]
-                 [cheshire "5.0.1"]]
+                 [cheshire "5.0.1"]
+                 [dieter "0.3.0"]]
   :main bill-tracker.core)

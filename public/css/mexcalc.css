@@ -1,0 +1,60 @@
+#expenseTable {
+
+}
+
+#expenseTable td {
+  text-align: center;
+}
+
+#expenseTable td.expense {
+    text-align: left;
+}
+
+#expenseTable th {
+    text-align: center;
+}
+
+#expenseTable th.complete {
+    width: 150px;
+}
+
+#expenseTable th.due {
+    width: 150px;
+}
+
+#expenseTable th.amount {
+    width: 100px;
+}
+
+#expenseTable th.expense {
+    text-align: left;
+    padding-left: 15px;
+}
+
+#expenseTable td.action {
+    width: 80px;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: center;
+}
+
+a.action {
+    padding: 0px;
+    text-align: center;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+#expenseTable td i {
+    margin-right: 2px;
+    margin-left: 2px;
+    margin-top: 0px;
+}
+
+.addContainer {
+    float: right;
+}
+
+#msgContainer .alert {
+    margin-bottom: 5px !important;
+}
