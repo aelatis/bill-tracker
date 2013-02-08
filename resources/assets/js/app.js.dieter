@@ -1,7 +1,12 @@
 [
   "namespace.coffee"
+
   "models/expense.coffee"
+
   "collections/expenses.coffee"
+
+  "views/expenses/layout.coffee"
+
   "bootstrapper.coffee"
   "application.coffee"
 ]

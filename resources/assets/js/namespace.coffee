@@ -14,4 +14,4 @@
 
     parent = parent[currentPart]
 
-  return parent
+  payload parent

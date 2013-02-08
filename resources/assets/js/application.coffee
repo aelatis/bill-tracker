@@ -6,13 +6,13 @@ namespace 'BillTracker', (exports) ->
       #@errorView = new BillTracker.Views.AppStateView("error")
 
       bootstrapper = new BillTracker.Bootstrapper
-      #  success: =>
-      #    @boot()
+        success: =>
+          @boot()
 
-      #  error: =>
-      #    console.log("Bootstrap Error")
-      #    $(".initial-loading-indicator").remove()
-      #    @errorView.render()
+        error: =>
+          console.log("Bootstrap Error")
+          # $(".initial-loading-indicator").remove()
+          # @errorView.render()
 
       #bootstrapper.fetch()
 
@@ -34,3 +34,4 @@ namespace 'BillTracker', (exports) ->
       #BillTracker.stateManager.transitionTo("expenses") unless match
 
   exports.App = new Application() # Initialize app
+
