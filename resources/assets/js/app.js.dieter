@@ -1,3 +1,7 @@
 [
-  "test.coffee"
+  "namespace.coffee"
+  "models/expense.coffee"
+  "collections/expenses.coffee"
+  "bootstrapper.coffee"
+  "application.coffee"
 ]

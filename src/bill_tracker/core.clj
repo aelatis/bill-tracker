@@ -8,7 +8,8 @@
             [compojure.handler :as handler]
             [compojure.route :as route]))
 
-(def ^{:const true} json-header {"Content-Type" "application/json; charset=utf-8"})
+(def ^{:const true} json-header
+  {"Content-Type" "application/json; charset=utf-8"})
 
 (def db {:subprotocol "mysql"
          :subname "//127.0.0.1:3306/expenses"
@@ -16,7 +17,7 @@
          :password ""})
 
 (def config-options {:compress false
-                     :asset-roots ["./"]
+                     :asset-roots ["resources"]
                      :cache-root "resources/asset-cache"})
 
 (defn expenses [] (sql/with-connection db
@@ -35,7 +36,6 @@
 
 (defroutes json-router
   (GET "/expenses" [] (get-expenses-page-json))
-  (GET "/assets" [] (generate-string {:assets (link-to-asset "js/app.js" config-options)}))
   (route/not-found ""))
 
 (defn dispatcher [req]
