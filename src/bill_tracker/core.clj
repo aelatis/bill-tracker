@@ -47,7 +47,11 @@
     "html" (html-router req)
     "json" (json-router req)))
 
-(defn -main []
+(def cli-args
+  ["-p" "--port" "Listen on this port" :parse-fn #(Integer. %) :default 8080])
+
+(defn -main [& args]
+  (def opts (-> (cli args cli-args) first))
   (run-server (-> (-> dispatcher wrap-accept-param (handler/site))
                   (asset-pipeline config-options))
-              {:port 8080}))
+              {:port (:port opts)}))
