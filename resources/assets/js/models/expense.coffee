@@ -3,11 +3,11 @@ namespace 'BillTracker.Models', (exports) ->
   class exports.Expense extends Backbone.Model
 
     defaults:
-      "title": "nil",
+      "name": "nil",
       "amount": 0,
       "due": 0,
       "complete": false,
       "enabled": false
 
-    constructor: ->
+    initialize: ->
       console.log "Initiated expense model"
