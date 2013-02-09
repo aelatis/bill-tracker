@@ -1,6 +1,7 @@
 # bill-tracker
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure / Backbone.JS app for keeping track of expenses. This project exists for the 
+sole reason of learning & improving Clojure & Backbone.JS skills.
 
 ## Usage
 
