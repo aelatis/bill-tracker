@@ -54,4 +54,4 @@
   (def opts (-> (cli args cli-args) first))
   (run-server (-> (-> dispatcher wrap-accept-param (handler/site))
                   (asset-pipeline config-options))
-              {:port (:port opts)}))
+              (select-keys opts [:port])))
