@@ -3,18 +3,22 @@
         compojure.core
         [ring.middleware.accept-param :only [wrap-accept-param]]
         [cheshire.core :only [generate-string]]
+        [bill-tracker.config :only [fetch-config]]
         dieter.core)
   (:require [clojure.java.jdbc :as sql]
             [compojure.handler :as handler]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [clojure.java.io :as io]))
 
 (def ^{:const true} json-header
   {"Content-Type" "application/json; charset=utf-8"})
 
-(def db {:subprotocol "mysql"
-         :subname "//127.0.0.1:3306/expenses"
-         :user "root"
-         :password ""})
+(def config (fetch-config "config.clj"))
+
+(def db {:subprotocol (-> config :db :adapter)
+         :subname (-> config :db :subname)
+         :user (-> config :db :user)
+         :password (-> config :db :adapter)})
 
 (def config-options {:compress false
                      :asset-roots ["resources"]
