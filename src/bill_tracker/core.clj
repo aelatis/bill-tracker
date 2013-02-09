@@ -48,10 +48,12 @@
     "json" (json-router req)))
 
 (def cli-args
-  ["-p" "--port" "Listen on this port" :parse-fn #(Integer. %) :default 8080])
+  ["-p" "--port" "Listen on this port" :parse-fn #(Integer. %) :default 8080]
+  ["-t" "--threads" "Threads to spawn" :parse-fn #(Integer. %) :default 4]
+  ["-q" "--queue-size" "Max queue size" :parse-fn #(Integer. %) :default 20480])
 
 (defn -main [& args]
   (def opts (-> (cli args cli-args) first))
   (run-server (-> (-> dispatcher wrap-accept-param (handler/site))
                   (asset-pipeline config-options))
-              (select-keys opts [:port])))
+              (select-keys opts [:port :threads :queue-size])))
