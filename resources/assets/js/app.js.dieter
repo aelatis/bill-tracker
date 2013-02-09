@@ -5,7 +5,7 @@
 
   "collections/expenses.coffee"
 
-  "views/expenses/layout.coffee"
+  "views/expenses/index.coffee"
 
   "bootstrapper.coffee"
   "application.coffee"

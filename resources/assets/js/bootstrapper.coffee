@@ -6,17 +6,16 @@ namespace 'BillTracker', (exports) ->
       @successCallback = options.success
       @errorCallback = options.error
 
+      #BillTracker.Expenses = new Backbone.Collection
+      #BillTracker.ExpensesView = new BillTracker.Views.Expenses.Index(model: BillTracker.Expenses)
+
       @expenses = new BillTracker.Collections.Expenses
       @expenses.fetch
-        success: (model, response) ->
-          console.log(model)
-        error: (model, response) ->
-          console.log("fail!")
+        success: (collection, response) ->
+          console.log(collection.toJSON())
+          BillTracker.ExpensesView = new BillTracker.Views.Expenses.Index(collection: collection)
+        error: (collection, response) ->
+          console.log("Failed to fetch expenses collection " + response)
 
       @successCallback.call(this)
       #@errorCallback.call(this)
-      #success = false
-      #if success
-      #  @successCallback.call(this)
-      #else
-      #  @errorCallback.call(this)
