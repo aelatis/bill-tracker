@@ -1,0 +1,8 @@
+{:db
+ {:adapter  "postgresql"
+  :subname  "//127.0.0.1:5432/expenses"
+  :user     ""
+  :password ""}
+ :aws
+ {:key    "my-key"
+  :secret "my-secret"}}}
