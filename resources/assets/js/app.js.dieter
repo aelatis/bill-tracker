@@ -9,4 +9,8 @@
 
   "bootstrapper.coffee"
   "application.coffee"
+
+  "handlebarsTemplates.js"
+  
+  "templates/expenses.hbs"
 ]
