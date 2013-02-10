@@ -5,7 +5,9 @@
         [cheshire.core :only [generate-string]]
         [bill-tracker.config :only [fetch-config]]
         [clojure.tools.cli :only [cli]]
-        dieter.core)
+        [dieter.core :only [asset-pipeline]]
+        [dieter.asset.handlebars :only [map->Handlebars]]
+        [dieter.asset :only [register]])
   (:require [clojure.java.jdbc :as sql]
             [compojure.handler :as handler]
             [compojure.route :as route]
@@ -21,7 +23,9 @@
          :user (-> config :db :user)
          :password (-> config :db :adapter)})
 
+(register "hbs" map->Handlebars)
 (def config-options {:compress false
+                     :engine   :v8
                      :asset-roots ["resources"]
                      :cache-root "resources/asset-cache"})
 
