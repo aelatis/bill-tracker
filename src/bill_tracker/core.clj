@@ -4,6 +4,7 @@
         [ring.middleware.accept-param :only [wrap-accept-param]]
         [cheshire.core :only [generate-string]]
         [bill-tracker.config :only [fetch-config]]
+        [clojure.tools.cli :only [cli]]
         dieter.core)
   (:require [clojure.java.jdbc :as sql]
             [compojure.handler :as handler]
@@ -48,10 +49,16 @@
     "json" (json-router req)))
 
 (def cli-args
-  ["-p" "--port" "Listen on this port" :parse-fn #(Integer. %) :default 8080])
+  [["-p" "--port" "Listen on this port" :parse-fn #(Integer. %) :default 8080]
+   ["-t" "--threads" "Threads to spawn" :parse-fn #(Integer. %) :default 4]
+   ["-q" "--queue-size" "Max queue size" :parse-fn #(Integer. %) :default 20480]
+   ["-h" "--help" "Show help" :default false :flag true]])
 
 (defn -main [& args]
-  (def opts (-> (cli args cli-args) first))
-  (run-server (-> (-> dispatcher wrap-accept-param (handler/site))
-                  (asset-pipeline config-options))
-              {:port (:port opts)}))
+  (let [[options args banner] (apply cli args cli-args)]
+    (when (:help options)
+      (println banner)
+      (System/exit 0))
+    (run-server (-> (-> dispatcher wrap-accept-param (handler/site))
+                    (asset-pipeline config-options))
+                (select-keys options [:port :threads :queue-size]))))
