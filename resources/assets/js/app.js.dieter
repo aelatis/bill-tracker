@@ -1,6 +1,10 @@
 [
   "namespace.coffee"
 
+  "handlebarsTemplates.js"
+
+  "./templates/"
+
   "models/expense.coffee"
 
   "collections/expenses.coffee"
@@ -9,8 +13,4 @@
 
   "bootstrapper.coffee"
   "application.coffee"
-
-  "handlebarsTemplates.js"
-  
-  "templates/expenses.hbs"
 ]
