@@ -29,9 +29,10 @@
                      :asset-roots ["resources"]
                      :cache-root "resources/asset-cache"})
 
-(defn expenses [] (sql/with-connection db
-  (sql/with-query-results rows ["SELECT * FROM expenses"]
-    (doall rows))))
+(defn expenses []
+  (sql/with-connection db
+    (sql/with-query-results rows ["SELECT * FROM expenses"]
+      (doall rows))))
 
 (defn get-expenses-page-json []
   (async-response respond

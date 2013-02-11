@@ -4,10 +4,10 @@ namespace 'BillTracker.Views.Expenses', (exports) ->
 
     el: $('#expenses')
 
-    template: $('#expense-row-template')
+    name: 'resources/./assets/js/./templates/expenses'
 
     initialize: ->
-      @template = Handlebars.compile(@template.html())
+      @template = HandlebarsTemplates[@name]
       @listenTo(@collection, 'all', @render)
 
     addOne: (item) ->
