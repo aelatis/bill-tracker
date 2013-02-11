@@ -21,7 +21,7 @@
 (def db {:subprotocol (-> config :db :adapter)
          :subname (-> config :db :subname)
          :user (-> config :db :user)
-         :password (-> config :db :adapter)})
+         :password (-> config :db :password)})
 
 (register "hbs" map->Handlebars)
 (def config-options {:compress false
