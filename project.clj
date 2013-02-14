@@ -12,6 +12,6 @@
                  [postgresql "9.1-901.jdbc4"]
                  [org.clojure/tools.cli "0.2.2"]
                  [cheshire "5.0.1"]
-                 [jamesdphillips/dieter "0.3.1"]
+                 [jamesdphillips/dieter "0.3.2"]
                  [jamesdphillips/dieter-handlebars "0.1.1"]]
   :main bill-tracker.core)

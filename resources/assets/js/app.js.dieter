@@ -3,7 +3,7 @@
 
   "handlebarsTemplates.js"
 
-  "./templates/"
+  "../templates/"
 
   "models/expense.coffee"
 
