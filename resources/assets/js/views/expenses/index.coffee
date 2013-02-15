@@ -4,7 +4,7 @@ namespace 'BillTracker.Views.Expenses', (exports) ->
 
     el: $('#expenses')
 
-    name: 'resources/./assets/js/./templates/expenses'
+    name: 'templates/expenses'
 
     initialize: ->
       @template = HandlebarsTemplates[@name]
